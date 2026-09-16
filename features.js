@@ -4,6 +4,8 @@
   const CART_KEY = 'zqc-shopping-list-v1';
   const FONT_KEY = 'zqc-large-text-v1';
   const SITE = 'https://abaic2.github.io/zaiqingchun-yinfa-supermarket/';
+  const entryProductId = new URL(location.href).searchParams.get('product');
+  const isWeChat = /MicroMessenger/i.test(navigator.userAgent || '');
   const ADDRESS = '山西省临汾市尧都区功臣御苑一期西门，再青春银发超市';
   const products = new Map(PRODUCTS.map(p => [p.id, p]));
   let currentProduct = null;
@@ -163,16 +165,45 @@
   byId('copy-product').onclick = () => {
     if (currentProduct) copy(productURL(currentProduct.id), '单品链接已复制，可以发给家人或朋友。');
   };
+  function showShareGuide(wechat) {
+    byId('share-guide-text').textContent = wechat
+      ? '请点击微信右上角“…” → “发送给朋友”，再选择好友并发送。无需复制链接。'
+      : '当前浏览器未能打开系统分享。请使用浏览器菜单中的“分享”，若出现“微信”或“微信好友”，选择后即可发送。若没有微信选项，可在微信中打开此商品页，再通过右上角“…”发送给朋友。';
+    byId('share-guide-product').textContent = currentProduct ? '正在分享：' + currentProduct.name : '';
+    openDialog(byId('share-guide'));
+  }
+  byId('close-share-guide').onclick = byId('share-guide-done').onclick = () => byId('share-guide').close();
+  byId('share-guide-copy').onclick = () => {
+    if (currentProduct) copy(productURL(currentProduct.id), '单品链接已复制。');
+  };
   byId('share-product').onclick = async () => {
     const p = currentProduct;
     if (!p) return;
+    if (isWeChat) {
+      // Load the real product URL so WeChat shares the entered page, not an old catalog URL.
+      if (entryProductId !== String(p.id)) {
+        const url = new URL(location.href);
+        url.searchParams.set('product', p.id);
+        url.hash = 'share-wechat';
+        history.replaceState(null, '', url.href);
+        location.reload();
+        return;
+      }
+      showShareGuide(true);
+      return;
+    }
     const data = {title: p.name + ' · 再青春银发超市', text: p.name + (p.price === null ? '' : `，${money(p.price)}`), url: productURL(p.id)};
     if (navigator.share) {
       try { await navigator.share(data); return; }
       catch (error) { if (error.name === 'AbortError') return; }
     }
-    await copy(data.url, '单品链接已复制，可以粘贴到微信分享。');
+    showShareGuide(false);
   };
+  document.querySelectorAll('.map-trigger').forEach(button => {
+    button.onclick = () => openDialog(byId('map-dialog'));
+  });
+  byId('close-map').onclick = () => byId('map-dialog').close();
+  byId('map-copy-address').onclick = () => copy(ADDRESS, '门店地址已复制。');
   byId('copy-list').onclick = () => {
     const lines = rows().map(({product: p, quantity}) => `${p.name} × ${quantity}：${p.price === null ? '待询价' : money(p.price * quantity)}`);
     const text = ['再青春银发超市 · 选购清单', ...lines, '参考合计：' + byId('list-total').textContent,
@@ -211,4 +242,10 @@
   });
   updateList();
   openURLProduct();
+  if (isWeChat && currentProduct && new URL(location.href).hash === '#share-wechat') {
+    const url = new URL(location.href);
+    url.hash = '';
+    history.replaceState(null, '', url.href);
+    showShareGuide(true);
+  }
 })();
