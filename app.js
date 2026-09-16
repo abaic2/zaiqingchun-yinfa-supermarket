@@ -1,5 +1,7 @@
 const $=id=>document.getElementById(id);
-const categories=['助行器系列','轮椅系列','护理床系列','血压计系列','血糖仪系列','助听器系列','按摩理疗系列','固定带系列','支具系列','雾化吸痰器系列','家用系列'];
+const categoryOrder=['助行器系列','轮椅系列','护理床系列','血压计系列','血糖仪系列','助听器系列','按摩理疗系列','固定带系列','支具系列','呼吸机系列','雾化吸痰器系列','家用系列'];
+const availableCategories=[...new Set(PRODUCTS.map(p=>p.category))];
+const categories=[...categoryOrder.filter(c=>availableCategories.includes(c)),...availableCategories.filter(c=>!categoryOrder.includes(c))];
 let selected='全部产品';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const catLabel=s=>s==='全部产品'?s:s.replace('系列','');
@@ -17,4 +19,7 @@ $('close').onclick=()=>$('detail').close();
 $('detail').addEventListener('close',()=>document.body.classList.remove('modal-open'));
 $('detail').addEventListener('click',e=>{if(e.target===$('detail')){const r=$('detail').getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)$('detail').close();}});
 $('detail-store').onclick=()=>{$('detail').close();$('store').scrollIntoView({behavior:'smooth'});};
+document.querySelector('.catalog-stat strong').textContent=PRODUCTS.length;
+document.querySelector('.catalog-stat span').textContent=`${categories.length} 个品类 · 按需查找`;
+document.querySelector('.category-heading>span').textContent=`${categories.length} 类`;
 drawCategories();render();
