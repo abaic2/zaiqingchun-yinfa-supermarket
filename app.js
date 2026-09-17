@@ -1,5 +1,5 @@
 const $=id=>document.getElementById(id);
-const categoryOrder=['助行器系列','轮椅系列','护理床系列','血压计系列','血糖仪系列','助听器系列','按摩理疗系列','固定带系列','支具系列','呼吸机系列','雾化吸痰器系列','家用系列'];
+const categoryOrder=['助行器系列','轮椅系列','护理床系列','血压计系列','血糖仪系列','助听器系列','按摩理疗系列','固定带系列','支具系列','呼吸机系列','制氧机系列','雾化吸痰器系列','足浴盆系列','家用系列'];
 const availableCategories=[...new Set(PRODUCTS.map(p=>p.category))];
 const categories=[...categoryOrder.filter(c=>availableCategories.includes(c)),...availableCategories.filter(c=>!categoryOrder.includes(c))];
 let selected='全部产品';
