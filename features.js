@@ -88,7 +88,7 @@
       : '当前浏览器无法保存清单，关闭页面前请复制清单留存。';
     byId('list-items').innerHTML = items.map(({product: p, quantity}) => `
       <article class="list-row" data-list-row="${p.id}">
-        <img src="${esc(p.image)}" alt="${esc(p.name)}" width="72" height="96" loading="lazy">
+        <img src="${esc(thumbnail(p))}" alt="${esc(p.name)}" width="72" height="96" loading="lazy">
         <div class="list-row-main"><button class="list-product-name" data-list-open="${p.id}">${esc(p.name)}</button>
           <p class="list-unit-price">${p.price === null ? '价格待核实' : money(p.price) + ' / 件'}</p>
           <div class="quantity-controls"><button data-quantity="${p.id}" data-delta="-1" aria-label="减少${esc(p.name)}数量" ${quantity <= 1 ? 'disabled' : ''}>−</button>
