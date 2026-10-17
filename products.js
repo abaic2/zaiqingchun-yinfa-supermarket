@@ -85,7 +85,7 @@ const PRODUCTS = [
     "name": "瑞思迈睡眠机",
     "category": "呼吸机系列",
     "price": 6800,
-    "image": "assets/p79.jpg?v=20260916",
+    "image": "assets/p79.jpg?v=20261017",
     "description": "瑞思迈品牌睡眠呼吸设备，配有显示屏、旋钮和侧置湿化水盒。具体型号、面罩及管路配置可联系门店了解。"
   },
   {
@@ -669,7 +669,7 @@ const PRODUCTS = [
     "name": "小轮轮椅",
     "category": "轮椅系列",
     "price": 798,
-    "image": "assets/p67.jpg?v=20260916",
+    "image": "assets/p67.jpg?v=20261017",
     "description": "小轮轮椅，绿色车架搭配深色座靠面，设后方推手、扶手和脚踏，方便陪护推行。"
   },
   {
@@ -809,4 +809,5 @@ const PRODUCTS = [
     "description": "泰昌足浴盆，浅色翻盖式外观，盆内设有双脚放置区域及滚轮结构。可到店比较不同价位款式，具体容量、加热与按摩功能以产品说明为准。"
   }
 ];
+
 
